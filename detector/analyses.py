@@ -1,12 +1,21 @@
 from .lib.analysis import analysis
+from .lib.utils import transform_pyplot_figure_to_base64_png_uri
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 # Step 1: Create an Analysis class
 class SimplePlotAnalysis:
     def analyze(self, data):
+        x = np.linspace(0, 10, 100)
+        y = x**2
+        plt.plot(x, y)
+        base64_image = transform_pyplot_figure_to_base64_png_uri(plt)
+
         return {
-            'plot': 'base64encoded',
-            'data': data
+            'image:Random plot': base64_image,
+            'Raw data': data,
+            'Half-life': '32 days'
         }
 
 
