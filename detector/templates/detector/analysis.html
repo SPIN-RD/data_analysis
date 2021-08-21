@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN RD</title>
+</head>
+<body>
+    <h1>Analysis Name: {{ analysis_name }}</h1>
+    <h1>Device Id: {{ device_id}}</h1>
+    {% load filters %}
+    {% for key in analysis %}
+        {% if key|startswith:'image:' %}
+            <img src="{{ analysis|get_item:key }}">
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

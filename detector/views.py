@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from .models import Measurement
 from .serializers import MeasurementSerializer, PerformAnalysisSerializer
 from .analyses import find_analysis, analyses
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 class MeasurementCreateView(generics.CreateAPIView):
     """
@@ -58,7 +58,35 @@ class PerformAnalysisView(generics.GenericAPIView):
         return analysis_cls().analyze(data)
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the detector index.")
+    context = {}
+    return render(request, "detector/index.html", context)
 
-def detail(request, device_id):
-    return HttpResponse(f"Detailed overview of device id {device_id}")
+def detail(request, device_id, analysis_name):
+    analysis = do_analysis(analysis_name, device_id)
+
+    context = { 
+        'analysis': analysis,
+        'device_id': device_id,
+        'analysis_name': analysis_name
+    }
+
+    return render(request, 'detector/analysis.html', context)
+
+# Just copying some code for now
+def do_analysis(name, device_id):
+    analysis = find_analysis(name)
+    if not analysis:
+        return None
+
+    analysis_cls, mode = analysis
+    latest_compatible_measurement = Measurement.objects.filter(
+        mode=mode, device_id=device_id).order_by('-created_at').first()
+
+    if not latest_compatible_measurement:
+        return None
+
+    data = latest_compatible_measurement.measurement_data
+    if not data:
+        return None
+
+    return analysis_cls().analyze(data)
