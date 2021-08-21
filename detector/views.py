@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from .models import Measurement
 from .serializers import MeasurementSerializer, PerformAnalysisSerializer
 from .analyses import find_analysis, analyses
-
+from django.http import HttpResponse
 
 class MeasurementCreateView(generics.CreateAPIView):
     """
@@ -56,3 +56,9 @@ class PerformAnalysisView(generics.GenericAPIView):
             return None
 
         return analysis_cls().analyze(data)
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the detector index.")
+
+def detail(request, device_id):
+    return HttpResponse(f"Detailed overview of device id {device_id}")
