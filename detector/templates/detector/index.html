@@ -1,31 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "detector/base.html" %}
+{% block content %}
     <h1>Device ID:</h1>
-    <input type="text">
+    <input type="number" id="device_id">
+
+    <!--Currently ignored-->
     <h1>Analysis Type</h1>
+    
     <div>
-        <input type="radio" id="type1" name="drone" value="type1"
+        <input type="radio" id="half-life" name="drone" value="half-life"
                checked>
-        <label for="type1">type1</label>
+        <label for="half-life">half-life</label>
     </div>
-      
-    <div>
-        <input type="radio" id="type2" name="drone" value="type2"
-               checked>
-        <label for="type2">type2</label>
-    </div>
-      
-    <div>
-        <input type="radio" id="type3" name="drone" value="type3"
-               checked>
-        <label for="type3">type3</label>
-    </div>      
-</body>
-</html>
+    <!-- -->
+
+    <input type="submit" onclick="onClick()" value="Submit">
+
+    <script>
+        function onClick() { 
+            let device_id = document.getElementById("device_id").value;
+            window.location.href = `${window.location.origin}/detector/half-life/${device_id}`
+            console.log(device_id)
+        }
+    </script>
+{% endblock content %}

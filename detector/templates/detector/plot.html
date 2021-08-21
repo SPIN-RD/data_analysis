@@ -1,10 +1,5 @@
 {% extends "detector/base.html" %}
 {% block content %}
-    <h1>Device Id: {{ device_id}}</h1>
-    <code>
-        {{ json_data }}
-    </code>
-
     <h5>Fit parameter:</h5>
     <h6>Mu: {{ fit_params.mu|floatformat:3 }} +/- {{ fit_params.mu_err|floatformat:3 }} </h6>
     <h6>Sigma: {{ fit_params.sigma|floatformat:3 }} +/- {{ fit_params.sigma_err|floatformat:3 }} </h6>
