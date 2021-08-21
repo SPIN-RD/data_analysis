@@ -7,13 +7,10 @@
     <title>SPIN RD</title>
 </head>
 <body>
-    <h1>Analysis Name: {{ analysis_name }}</h1>
     <h1>Device Id: {{ device_id}}</h1>
+    <code>
+        {{ json_data }}
+    </code>
     {% load filters %}
-    {% for key in analysis %}
-        {% if key|startswith:'image:' %}
-            <img src="{{ analysis|get_item:key }}">
-        {% endif %}
-    {% endfor %}
 </body>
 </html>

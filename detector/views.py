@@ -1,10 +1,10 @@
 from django.shortcuts import render
+from django.http import HttpResponse, HttpRequest, HttpResponseNotFound
 from rest_framework import generics, status, views
 from rest_framework.response import Response
 from .models import Measurement
-from .serializers import MeasurementSerializer, PerformAnalysisSerializer
-from .analyses import find_analysis, analyses
-from django.http import HttpResponse, HttpRequest
+from .serializers import MeasurementSerializer
+
 
 class MeasurementCreateView(generics.CreateAPIView):
     """
@@ -13,80 +13,24 @@ class MeasurementCreateView(generics.CreateAPIView):
     serializer_class = MeasurementSerializer
 
 
-class ListAnalysesView(views.APIView):
-    def get(self, request):
-        names = []
-        for analysis_wrapper in analyses:
-            names.append(analysis_wrapper.name)
-        return Response(names)
-
-
-class PerformAnalysisView(generics.GenericAPIView):
-    serializer_class = PerformAnalysisSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({'code': 'input_error', 'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-        data = serializer.validated_data
-        device_id = data['device_id']
-        analysis_name = data['analysis_name']
-
-        result = self.do_analysis(analysis_name, device_id)
-        if not result:
-            return Response({'error': 'Analysis not found or data is insufficient'}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response(data=result)
-
-    def do_analysis(self, name, device_id):
-        analysis = find_analysis(name)
-        if not analysis:
-            return None
-
-        analysis_cls, mode = analysis
-        latest_compatible_measurement = Measurement.objects.filter(
-            mode=mode, device_id=device_id).order_by('-created_at').first()
-
-        if not latest_compatible_measurement:
-            return None
-
-        data = latest_compatible_measurement.measurement_data
-        if not data:
-            return None
-
-        return analysis_cls().analyze(data)
-
 def index(request):
     context = {}
     return render(request, "detector/index.html", context)
 
-def detail(request, device_id, analysis_name):
-    analysis = do_analysis(analysis_name, device_id)
 
-    context = { 
-        'analysis': analysis,
+def half_life_analysis(request, device_id):
+    latest_measurement = Measurement.objects.filter(
+        device_id=device_id, mode='Linear').order_by('-created_at').first()
+
+    if not latest_measurement:
+        return HttpResponseNotFound()
+
+    json_data = latest_measurement.measurement_data
+
+    context = {
+        'analysis': {},
         'device_id': device_id,
-        'analysis_name': analysis_name
+        'json_data': json_data
     }
 
-    return render(request, 'detector/analysis.html', context)
-
-# Just copying some code for now
-def do_analysis(name, device_id):
-    analysis = find_analysis(name)
-    if not analysis:
-        return None
-
-    analysis_cls, mode = analysis
-    latest_compatible_measurement = Measurement.objects.filter(
-        mode=mode, device_id=device_id).order_by('-created_at').first()
-
-    if not latest_compatible_measurement:
-        return None
-
-    data = latest_compatible_measurement.measurement_data
-    if not data:
-        return None
-
-    return analysis_cls().analyze(data)
+    return render(request, 'detector/half_life_analysis.html', context)
