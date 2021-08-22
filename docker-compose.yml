@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  spinrd:
+    build: .
+    networks:
+      - spinrd
+      - didithilmy
+    ports:
+      - "8000:8000"
+    environment:
+      VIRTUAL_HOST: "play.detectors.dev"
+      VIRTUAL_PORT: "8000"
+      LETSENCRYPT_HOST: "play.detectors.dev"
+      DATABASE_URL: "postgres://spinrd:spinrd123@postgres:5432/spinrd"
+  postgres:
+    image: postgres
+    restart: always
+    networks:
+      - spinrd
+    environment:
+      POSTGRES_DB: spinrd
+      POSTGRES_USER: spinrd
+      POSTGRES_PASSWORD: spinrd123
+    volumes:
+      - "psql_data:/var/lib/postgresql/data"
+
+networks:
+  spinrd:
+  didithilmy:
+    external:
+      name: didithilmy
+
+volumes:
+  psql_data:
