@@ -75,7 +75,12 @@ def energy_spectrum_analysis(request, device_id):
                 marker=dict(color="blue"),
             ),
             Scatter(
-                x=x, y=y, mode="lines", name="Fit", opacity=0.8, marker_color="red",
+                x=x,
+                y=y,
+                mode="lines",
+                name="Fit",
+                opacity=0.8,
+                marker_color="red",
             ),
         ],
         output_type="div",
@@ -159,7 +164,12 @@ def half_life_analysis(request, device_id):
                 marker=dict(color="blue"),
             ),
             Scatter(
-                x=x, y=y, mode="lines", name="Fit", opacity=0.8, marker_color="red",
+                x=x,
+                y=y,
+                mode="lines",
+                name="Fit",
+                opacity=0.8,
+                marker_color="red",
             ),
         ],
         output_type="div",
@@ -193,7 +203,7 @@ def fitting_halflife(np_data, n_bins):
     data = zfit.Data.from_numpy(obs=obs, array=np_data)
 
     # create the model
-    lam = zfit.Parameter(f"lam_{N_runs}", 1, 0, 10)
+    lam = zfit.Parameter(f"lam_{N_runs}", -1, 0, -10)
     N_runs += 1
     expo = zfit.pdf.Exponential(obs=obs, lam=lam)
 
