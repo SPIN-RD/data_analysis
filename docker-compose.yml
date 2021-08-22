@@ -12,7 +12,9 @@ services:
       VIRTUAL_HOST: "play.detectors.dev"
       VIRTUAL_PORT: "8000"
       LETSENCRYPT_HOST: "play.detectors.dev"
+      ALLOWED_HOSTS: "play.detectors.dev"
       DATABASE_URL: "postgres://spinrd:spinrd123@postgres:5432/spinrd"
+      DEBUG: "False"
   postgres:
     image: postgres
     restart: always
