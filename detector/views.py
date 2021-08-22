@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpRequest, HttpResponseNotFound, Http404
+from django.http import HttpResponse, HttpRequest, HttpResponseNotFound, Http404, JsonResponse
 from rest_framework import generics, status, views
 from rest_framework.response import Response
 from .models import Measurement
@@ -29,7 +29,14 @@ class MeasurementRetrieveView(generics.RetrieveAPIView):
         if not qs:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(MeasurementSerializer(qs).data)
+        measurement_data = MeasurementSerializer(qs).data['measurement_data']
+
+        if request.GET.get('download'):
+            response = JsonResponse(measurement_data, safe=False)
+            response['Content-Disposition'] = 'attachment; filename=data.json'
+            return response
+
+        return Response(measurement_data)
 
 
 def index(request):
