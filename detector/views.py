@@ -145,9 +145,24 @@ def fitting_energy_spectrum(np_data, n_bins):
 
 
 def half_life_analysis(request, device_id):
-    np.random.seed(42)
-    hist_data = np.random.exponential(scale=5, size=10000)
-    n_bins = 100
+    latest_measurement = (
+        Measurement.objects.filter(device_id=device_id, mode="Count")
+        .order_by("-created_at")
+        .first()
+    )
+
+    if not latest_measurement:
+        raise Http404()
+
+    json_data = latest_measurement.measurement_data
+
+    counts = json_data['counts']
+    bin_time = json_data['binTime']
+
+    # np.random.seed(42)
+    # np.random.exponential(scale=5, size=10000)
+    hist_data = np.asarray(counts)
+    n_bins = int(bin_time)
     x, y, fit_params = fitting_halflife(hist_data, n_bins=n_bins)
     plot_div = plot(
         [
@@ -174,17 +189,6 @@ def half_life_analysis(request, device_id):
         ],
         output_type="div",
     )
-
-    latest_measurement = (
-        Measurement.objects.filter(device_id=device_id, mode="Count")
-        .order_by("-created_at")
-        .first()
-    )
-
-    if not latest_measurement:
-        raise Http404()
-
-    json_data = latest_measurement.measurement_data
 
     context = {
         "device_id": device_id,
