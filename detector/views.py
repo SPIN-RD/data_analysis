@@ -159,10 +159,9 @@ def half_life_analysis(request, device_id):
     counts = json_data['counts']
     bin_time = json_data['binTime']
 
-    # np.random.seed(42)
-    # np.random.exponential(scale=5, size=10000)
-    hist_data = np.asarray(counts)
-    n_bins = len(hist_data)
+    np.random.seed(42)
+    hist_data = np.random.exponential(scale=5, size=10000)
+    n_bins = 100
     x, y, fit_params = fitting_halflife(hist_data, n_bins=n_bins)
     plot_div = plot(
         [
