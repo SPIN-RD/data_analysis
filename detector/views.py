@@ -79,12 +79,13 @@ def half_life_analysis(request, device_id):
     context = {
         'device_id': device_id,
         'json_data': json_data,
-        'plot_div': plot_div, 
-        'title': 'Plot', 
+        'plot_div': plot_div,
+        'title': 'Plot',
         'fit_params': fit_params
     }
 
     return render(request, 'detector/half_life_analysis.html', context)
+
 
 N_runs = 0
 
