@@ -1,14 +1,5 @@
-{% extends "detector/base.html" %}
-{% block content %}
-    <h1>Device Id: {{ device_id}}</h1>
-    <code>
-        {{ json_data }}
-    </code>
-
+{% extends "detector/analysis_base.html" %}
+{% block parameters %}
     <h5>Fit parameter:</h5>
     <h6>Lambda: {{ fit_params.lam|floatformat:3 }} +/- {{ fit_params.lam_err|floatformat:3 }} </h6>
-
-    {% autoescape off %}
-    {{ plot_div }}
-    {% endautoescape %}
-{% endblock content %}
+{% endblock parameters %}

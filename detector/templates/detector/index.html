@@ -1,25 +1,33 @@
 {% extends "detector/base.html" %}
 {% block content %}
-    <h1>Device ID:</h1>
-    <input type="text" id="device_id">
+    <form class="row">
+        <div class="col-lg-4 mb-3">
+            <label for="device-id" style="font-size: xx-large">Device ID</label>
+            <div>
+                <input type="text" id="device-id" class="form-control">
+            </div>
+        </div>
 
-    <!--Currently ignored-->
-    <h1>Analysis Type</h1>
-    
-    <div>
-        <input type="radio" id="half-life" name="drone" value="half-life"
-               checked>
-        <label for="half-life">half-life</label>
-    </div>
-    <!-- -->
-
-    <input type="submit" onclick="onClick()" value="Submit">
+        <div class="col-lg-4 mb-3">
+            <label for="analysis" style="font-size: xx-large">Analysis Type</label>
+            <div class="mt-1">
+                <select name="analysis" id="analysis">
+                    <option value="half-life">Half Life</option>
+                    <option value="energy-spectrum">Energy Spectrum</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="button" onclick="onClick()" value="Submit" class="col-sm-1">
+        </div>
+    </form>
 
     <script>
         function onClick() { 
-            let device_id = document.getElementById("device_id").value;
-            window.location.href = `${window.location.origin}/detector/half-life/${device_id}`
-            console.log(device_id)
+            let device_id = document.getElementById("device-id").value;
+            let analysis = document.getElementById("analysis").value;
+            window.location.href = `${window.location.origin}/detector/${analysis}/${device_id}`
         }
     </script>
+
 {% endblock content %}

@@ -1,0 +1,27 @@
+{% extends "detector/base.html" %}
+{% block content %}
+    <h1>Device ID: {{ device_id}}</h1>
+    <code id="json_data">
+        {{ json_data }}
+    </code>
+    <a id="downloadAnchor" style="display:none"></a>
+    <input type="button" value="Download" onclick="download()">
+    
+    <script>
+        function download() {
+            let json = document.getElementById('json_data').innerText;
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent( json );
+            let dlAnchorElem = document.getElementById('downloadAnchor');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "data.json");
+            dlAnchorElem.click();
+        }
+    </script>
+
+    {% block parameters %}
+    {% endblock parameters %}
+
+    {% autoescape off %}
+        {{ plot_div }}
+    {% endautoescape %}
+{% endblock content %}
