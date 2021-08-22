@@ -203,7 +203,7 @@ def fitting_halflife(np_data, n_bins):
     data = zfit.Data.from_numpy(obs=obs, array=np_data)
 
     # create the model
-    lam = zfit.Parameter(f"lam_{N_runs}", -1, 0, -10)
+    lam = zfit.Parameter(f"lam_{N_runs}", -1, -10, 0)
     N_runs += 1
     expo = zfit.pdf.Exponential(obs=obs, lam=lam)
 
