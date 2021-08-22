@@ -6,7 +6,8 @@
     </code>
 
     <h5>Fit parameter:</h5>
-    <h6>Lambda: {{ fit_params.lam|floatformat:3 }} +/- {{ fit_params.lam_err|floatformat:3 }} </h6>
+    <h6>Mu: {{ fit_params.mu|floatformat:3 }} +/- {{ fit_params.mu_err|floatformat:3 }} </h6>
+    <h6>Sigma: {{ fit_params.sigma|floatformat:3 }} +/- {{ fit_params.sigma_err|floatformat:3 }} </h6>
 
     {% autoescape off %}
     {{ plot_div }}
