@@ -87,7 +87,7 @@ def energy_spectrum_analysis(request, device_id):
     )
 
     latest_measurement = (
-        Measurement.objects.filter(device_id=device_id, mode="Linear")
+        Measurement.objects.filter(device_id=device_id, mode="Count")
         .order_by("-created_at")
         .first()
     )
@@ -176,7 +176,7 @@ def half_life_analysis(request, device_id):
     )
 
     latest_measurement = (
-        Measurement.objects.filter(device_id=device_id, mode="Linear")
+        Measurement.objects.filter(device_id=device_id, mode="Count")
         .order_by("-created_at")
         .first()
     )
